@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+    <!-- Custom CSS, modify included CSS and upload it to your own server -->
+    <link rel="stylesheet" href="http://localhost:8000/docupass_template_live_mobile/docupass_live_mobile.css">
+    <!-- End Layout CSS  -->
+</head>
+<body>
+<section id="mainscreen" class="fullscreen">
+    <div class="col-lg-6 col-md-8 col-sm-10 col-xs-11">
+        <div class="screen card animate__animated animate__zoomIn" id="preloader">
+            <div class="card-body">
+                <img src="asset/loading2.svg" style="width: 118px; height: auto">
+                <div>Loading...</div>
+            </div>
+        </div>
+        <div class="screen card animate__animated animate__zoomIn" id="welcome" style="display: none">
+            <div class="card-body">
+                <h5 class="card-title ls" data-l="IdentityVerificationHead"><i class="fa fa-user-shield"></i> Identity Verification</h5>
+                <p class="card-text ls" data-l="EnterRef">To begin your identity verification, please enter your identity verification reference code below.</p>
+                <div class="form-group">
+                    <input type="text" class="form-control form-control-lg ls-p" data-l="ReferenceCode" name="referenceCode" id="referenceCode" placeholder="Reference Code">
+                </div>
+                <button class="btn btn-primary ls" data-l="Continue" id="btn_check_reference">Continue</button>
+            </div>
+        </div>
+        <div class="screen card animate__animated animate__zoomIn" id="agreement" style="display: none">
+            <div class="card-body ">
+                <h5 class="card-title ls" data-l="IdentityVerificationHead"><i class="fa fa-user-shield"></i> Identity Verification</h5>
+                <h6 class="card-subtitle mb-2 text-muted companyname"></h6>
+                <p class="card-text ls" id="welcomemessage" data-l="IntroV2">You are about to start an identity verification process by scanning a <strong>government-issued ID</strong>, and <strong>your face</strong>. Your identity
+                    information will be sent to <span class="companyname"></span> for further processing.</p>
+                <div class="idlist">
+                    <span id="AcceptP" class="text-success"><i class="fa fa-check"></i> <span class="ls" data-l="Passport">Passport</span></span>
+                    <span id="AcceptD" class="text-success"><i class="fa fa-check"></i> <span class="ls" data-l="DL">Driver's License</span></span>
+                    <span id="AcceptI" class="text-success"><i class="fa fa-check"></i> <span class="ls" data-l="IDCard">ID Card</span></span>
+                    <span id="DeclineP" class="text-danger"><i class="fa fa-times"></i> <span class="ls" data-l="Passport">Passport</span></span>
+                    <span id="DeclineD" class="text-danger"><i class="fa fa-times"></i> <span class="ls" data-l="DL">Driver's License</span></span>
+                    <span id="DeclineI" class="text-danger"><i class="fa fa-times"></i> <span class="ls" data-l="IDCard">ID Card</span></span>
+                </div>
+                <!-- optional terms agreement checkbox
+                  <div class="form-group">
+                      <div class="custom-control custom-checkbox">
+                          <input type="checkbox" class="custom-control-input" id="tosCheck" checked="">
+                          <label class="custom-control-label ls" data-l="toscheck" for="tosCheck">I agree to the <a href="#" target="_blank">service agreement</a></label>
+                      </div>
+                  </div>-->
+                <button class="btn btn-primary ls" data-l="StartVerification" id="btn_start_verification">Start Verification</button>
+            </div>
+        </div>
+        <div class="screen card animate__animated animate__zoomIn" id="phoneVerification" style="display: none">
+            <div class="card-body">
+                <h4 class="card-title ls" data-l="PhoneVerificationHead"><i class="fad fa-phone"></i> Phone Verification</h4>
+                <p class="card-text ls" data-l="EnterPhone">Please enter your phone number</p>
+                <div id="enterPhoneNumber">
+                    <div class="form-group">
+                        <select class="form-control" id="phoneCountryCode"></select>
+                    </div>
+                    <div class="form-group">
+                        <input class="form-control ls-p" data-l="PhoneNumber" id="phoneNumber" placeholder="Phone Number" autocomplete="no" inputmode="numeric">
+                    </div>
+                </div>
+                <div id="staticPhoneNumber">
+                    <h4 class="mb-3" id="presetPhoneNumber"></h4>
+                </div>
+                <button class="btn btn-primary ls" data-l="TextMe" id="btn_send_text"><i class="far fa-sms"></i> Text Me</button>
+                <button class="btn btn-secondary ls" data-l="CallMe" id="btn_send_call"><i class="fal fa-phone-volume"></i> Call Me</button>
+                <div id="codeConfirmation" class="mt-3 animate__animated animate__zoomIn" style="display: none">
+                    <div id="codeSentAlert" class="alert alert-success"><i class="fad fa-comment-alt-check"></i> Verification code sent! Please enter the code below.</div>
+                    <div class="form-group">
+                        <input class="form-control-lg form-control ls-p" data-l="VerificationCode" id="phoneVerificationCode" placeholder="Verification Code" inputmode="numeric" maxlength="6" autocomplete="no">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="screen card animate__animated animate__zoomIn" id="loadingAPI" style="display: none">
+            <div class="card-body">
+                <h4 class="card-title ls" data-l="loadingAssets"><i class="fas fa-cog fa-spin"></i> Loading Assets</h4>
+                <p class="card-text ls" data-l="pleaseWait">Hang on, this will only take a moment...</p>
+            </div>
+        </div>
+        <div class="screen card animate__animated animate__zoomIn" id="cameraPermission" style="display: none">
+            <div class="card-body">
+                <h4 class="card-title ls" data-l="CameraPermissionHead"><i class="fa fa-camera"></i> Camera Permission</h4>
+                <p class="card-text ls" data-l="CameraPermissionTipV2">To continue the verification, you must grant permission for our app to access your camera.</p>
+                <button class="showscreen btn btn-secondary ls" data-l="Back" data-screen="agreement">Back</button>
+                <button class="btn btn-primary ls" data-l="GrantPermission" id="btn_grant_permission">Grant Permission</button>
+            </div>
+        </div>
+        <div class="screen card animate__animated animate__zoomIn" id="pendingVerification" style="display: none">
+            <div class="card-body">
+                <h4 class="card-title ls" data-l="VerifyingV2">Just a moment</h4>
+                <p class="card-text" style="text-align: center; margin-top: 30px; margin-bottom: 30px;"><img src="asset/verifying.svg" style="width: 138px; height: auto"></p>
+                <p class="card-text ls" data-l="VerifyingTxtV2" style="text-align: center">Submitting your results...</p>
+            </div>
+        </div>
+        <div class="screen card text-white bg-success animate__animated animate__zoomIn" id="verificationSuccess" style="display: none">
+            <div class="card-body">
+                <h4 class="card-title ls" data-l="SuccessHead"><i class="fa fa-check-circle-o"></i> Verification Success</h4>
+                <p class="card-text ls" data-l="SuccessText">You have successfully completed identity verification process, you may now close this window.</p>
+            </div>
+        </div>
+        <div class="screen card text-white bg-danger animate__animated animate__zoomIn" id="verificationFailed" style="display: none">
+            <div class="card-body">
+                <h4 class="card-title ls" data-l="FailHead"><i class="fa fa-times-circle-o"></i> Verification Failed</h4>
+                <p class="card-text" id="failedreason"></p>
+                <button class="btn btn-secondary ls" data-l="Retry" id="btn_retry">Try Again</button>
+            </div>
+        </div>
+        <div class="screen card text-white bg-danger animate__animated animate__zoomIn" id="criticalError" style="display: none">
+            <div class="card-body">
+                <h4 class="card-title ls" data-l="ErrorHead"><i class="fa fa-exclamation-triangle"></i> Error</h4>
+                <p id="criticalErrorMessage" class="card-text"></p>
+            </div>
+        </div>
+        <p class="footer"><img src="asset/logo1.png" class="branding" id="logo1"></p>
+    </div>
+</section>
+<div id="video">
+    <div class="selectCam"><img src="asset/camera-shutter.png"></div>
+    <div class="capturediv portrait" data-cameraside="front">
+        <div id="mask2" class="mask"></div>
+        <div class="heading"><span class="badge badge-primary ls" data-l="ScanFaceV2"><i class="fa fa-user"></i> Scan Face</span></div>
+        <div class="camerafooter">
+            <span class="animate__animated animate__fadeInUp badge badge-warning ls step1" data-l="FaceScanStep1" style="display: none;">Scan your face with no facial expression.</span>
+            <span class="animate__animated animate__heartBeat animate__infinite badge badge-info ls step2" data-l="FaceScanStep2" style="display: none">Now...make a big smile :)</span>
+        </div>
+    </div>
+    <div class="capturediv document" data-cameraside="back">
+        <div id="mask1" class="mask"></div>
+        <div class="heading"><span class="badge badge-primary ls" data-l="ScanIDV2"><i class="fa fa-id-card"></i> Scan Photo ID</span></div>
+        <div class="camerafooter">
+            <span class="animate__animated animate__fadeInUp badge badge-warning ls step1" data-l="DocScanStep1" style="display: none;">Please place ID within the camera window</span>
+            <span class="animate__animated animate__fadeInUp badge badge-info ls step2" data-l="DocScanStep2" style="display: none"><i class="fa fa-exclamation-triangle"></i> Please hold the camera still</span>
+            <span class="animate__animated animate__fadeInUp badge badge-success ls step3" data-l="DocScanStep3" style="display: none"><i class="fas fa-circle-notch fa-spin"></i> Checking ID</span>
+            <span class="animate__animated animate__fadeInUp badge badge-warning ls step4" data-l="DocScanStep4" style="display: none"><i class="fas fa-redo"></i> Flip and scan back side of ID</span>
+        </div>
+    </div>
+    <div id="confirmInfo" class="animate__animated animate__fadeInDown" style="display: none">
+        <h3 class="ls" data-l="ConfirmInformation">Confirm Information</h3>
+        <div class="datafield" data-field="lastName">
+            <p class="ls" data-l="FamilyName">Family Name</p>
+            <h4></h4>
+        </div>
+        <div class="datafield" data-field="firstName">
+            <p class="ls" data-l="GivenName">Given Name</p>
+            <h4></h4>
+        </div>
+        <div class="datafield" data-field="documentNumber">
+            <p class="ls" data-l="DocumentIDNumber">Document ID Number</p>
+            <h4></h4>
+        </div>
+        <div class="datafield" data-field="idtype">
+            <p class="ls" data-l="IDType">ID Type</p>
+            <h4></h4>
+        </div>
+        <div class="datafield" data-field="issuer">
+            <p class="ls" data-l="IssuedCountry">Issued Country</p>
+            <h4></h4>
+        </div>
+        <div class="row" style="margin-top: 20px;">
+            <div class="col-6">
+                <button type="button" class="btn btn-success ls btn-block" data-l="AcceptPhoto" id="btn_confirm_info"><i class="fa fa-check"></i> Confirm</button>
+            </div>
+            <div class="col-6">
+                <button type="button" class="btn btn-secondary ls btn-block" data-l="RetakePhoto" id="btn_rescan"><i class="fa fa-times"></i> Retry</button>
+            </div>
+        </div>
+    </div>
+    <footer class="footer"><img src="https://www.idanalyzer.com/img/logo-blue.png" class="branding" id="logo2"></footer>
+    <video id="recordvideo" autoplay></video>
+    <canvas id="documentcanvas"></canvas>
+    <canvas id="facecanvas"></canvas>
+    <canvas id="faceverifycanvas"></canvas>
+</div>
+<div id="contract" class="animate__animated animate__fadeIn" style="display: none;">
+    <div id="contract_header" class="ls" data-l="ContractHead">
+        <i class="fad fa-file-signature"></i> Review Legal Document
+    </div>
+    <div id="contract_container"></div>
+    <div id="contract_toolbar">
+        <button class="btn btn-block btn-info" id="btn_contract"></button>
+    </div>
+    <div id="signnature_footer">
+        <i class="fad fa-lock-alt"></i> Secured Document Signing Service provided by ID Analyzer DocuPass on behalf of <span class="companyname"></span>.
+    </div>
+    <div style="display: none" class="signature_field notsigned" id="signature_field_template">
+        <img src="asset/signature.svg"> <span class="ls" data-l="ClickToSign">CLICK TO SIGN</span>
+    </div>
+    <div id="signatureCapture" style="display: none;">
+        <div id="signnature_header" class="ls" data-l="PleaseSignBelow">
+            Please Sign Below
+        </div>
+        <div id="canvas_container">
+            <canvas id="signpad"></canvas>
+        </div>
+        <div id="signnature_toolbar">
+            <button type="button" class="btn btn-warning ls" data-l="CancelSignature" id="btn_cancel_signature"><i class="fa fa-times"></i> Cancel</button>
+            <button type="button" class="btn btn-secondary ls" data-l="ClearSignature" id="btn_clear_signature"><i class="fa fa-eraser"></i> Clear</button>
+            <button type="button" class="btn btn-success ls" data-l="AcceptSignature" id="btn_confirm_signature"><i class="fa fa-check"></i> Confirm</button>
+        </div>
+    </div>
+</div>
+<!-- Do not remove Lenna image below -->
+<img src="asset/Lenna.jpg" id="Lenna" style="display: none">
+</body>
+</html>
