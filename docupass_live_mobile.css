@@ -326,7 +326,7 @@ body {
 }
 
 #mask2 {
-    background: radial-gradient(circle, transparent 0px, transparent 30%, rgba(255, 255, 255, 0.95) 30%, rgba(255, 255, 255, 0.95) 100%);
+    background: radial-gradient(circle, transparent 0px, transparent 70%, rgba(4, 7, 53, 0.95) 70%, rgba(255, 255, 255, 0.95) 100%);
 }
 
 @media screen and (orientation: portrait) {
