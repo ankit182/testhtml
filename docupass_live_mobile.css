@@ -3,7 +3,6 @@ html, body {
     height: 100%;
     overflow: hidden;
     font-family: 'Roboto', sans-serif !important;
-    background: #040721;
 }
 
 body {
@@ -290,6 +289,7 @@ body {
     text-align: center;
     color: #888;
     text-shadow: 0 0 6px rgba(255, 255, 255, 1);
+    background: #040721;
 }
 
 .idlist > span {
