@@ -285,6 +285,10 @@ body {
     border: none;
 }
 
+.card-body1 {
+    background: #040721 !important;
+}
+
 #preloader .card-body {
     text-align: center;
     color: #888;
