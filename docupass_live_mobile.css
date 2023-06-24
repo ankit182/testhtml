@@ -3,6 +3,7 @@ html, body {
     height: 100%;
     overflow: hidden;
     font-family: 'Roboto', sans-serif !important;
+    background: #040721;
 }
 
 body {
@@ -21,6 +22,8 @@ body {
     overflow-y: auto;
     padding-top: 10px;
     padding-bottom: 10px;
+    background: #040721;
+
 }
 
 .video {
