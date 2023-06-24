@@ -1,209 +1,624 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
-    <!-- Custom CSS, modify included CSS and upload it to your own server -->
-    <link rel="stylesheet" href="https://ankit182.github.io/testhtml/docupass_live_mobile.css">
-    <!-- End Layout CSS  -->
-</head>
-<body>
-<section id="mainscreen" class="fullscreen">
-    <div class="col-lg-6 col-md-8 col-sm-10 col-xs-11">
-        <div class="screen card animate__animated animate__zoomIn" id="preloader">
-            <div class="card-body">
-                <img src="https://ankit182.github.io/testhtml/loader.svg" style="width: 118px; height: auto">
-                <div>Load</div>
-            </div>
-        </div>
-        <div class="screen card animate__animated animate__zoomIn" id="welcome" style="display: none">
-            <div class="card-body">
-                <h5 class="card-title ls" data-l="IdentityVerificationHead"><i class="fa fa-user-shield"></i> Identity Verific</h5>
-                <p class="card-text ls" data-l="EnterRef">To begin your identity verification, please enter your identity verification reference code below.</p>
-                <div class="form-group">
-                    <input type="text" class="form-control form-control-lg ls-p" data-l="ReferenceCode" name="referenceCode" id="referenceCode" placeholder="Reference Code">
-                </div>
-                <button class="btn btn-primary ls" data-l="Continue" id="btn_check_reference">Continue</button>
-            </div>
-        </div>
-        <div class="screen card animate__animated animate__zoomIn" id="agreement" style="display: none">
-            <div class="card-body ">
-                <h5 class="card-title ls" data-l="IdentityVerificationHead"><i class="fa fa-user-shield"></i> Identity Verifi</h5>
-                <h6 class="card-subtitle mb-2 text-muted companyname"></h6>
-                <p class="card-text ls" id="welcomemessage" data-l="IntroV2">You are about to start an identity verification process by scanning a <strong>government-issued ID</strong>, and <strong>your face</strong>. Your identity
-                    information will be sent to <span class="companyname"></span> for further processing.</p>
-                <div class="idlist">
-                    <span id="AcceptP" class="text-success"><i class="fa fa-check"></i> <span class="ls" data-l="Passport">Passport</span></span>
-                    <span id="AcceptD" class="text-success"><i class="fa fa-check"></i> <span class="ls" data-l="DL">Driver's License</span></span>
-                    <span id="AcceptI" class="text-success"><i class="fa fa-check"></i> <span class="ls" data-l="IDCard">ID Card</span></span>
-                    <span id="DeclineP" class="text-danger"><i class="fa fa-times"></i> <span class="ls" data-l="Passport">Passport</span></span>
-                    <span id="DeclineD" class="text-danger"><i class="fa fa-times"></i> <span class="ls" data-l="DL">Driver's License</span></span>
-                    <span id="DeclineI" class="text-danger"><i class="fa fa-times"></i> <span class="ls" data-l="IDCard">ID Card</span></span>
-                </div>
-                <!-- optional terms agreement checkbox
-                  <div class="form-group">
-                      <div class="custom-control custom-checkbox">
-                          <input type="checkbox" class="custom-control-input" id="tosCheck" checked="">
-                          <label class="custom-control-label ls" data-l="toscheck" for="tosCheck">I agree to the <a href="#" target="_blank">service agreement</a></label>
-                      </div>
-                  </div>-->
-                <button class="btn btn-primary ls" data-l="StartVerification" id="btn_start_verification">Start Verification</button>
-            </div>
-        </div>
-        <div class="screen card animate__animated animate__zoomIn" id="phoneVerification" style="display: none">
-            <div class="card-body">
-                <h4 class="card-title ls" data-l="PhoneVerificationHead"><i class="fad fa-phone"></i> Phone Verification</h4>
-                <p class="card-text ls" data-l="EnterPhone">Please enter your phone number</p>
-                <div id="enterPhoneNumber">
-                    <div class="form-group">
-                        <select class="form-control" id="phoneCountryCode"></select>
-                    </div>
-                    <div class="form-group">
-                        <input class="form-control ls-p" data-l="PhoneNumber" id="phoneNumber" placeholder="Phone Number" autocomplete="no" inputmode="numeric">
-                    </div>
-                </div>
-                <div id="staticPhoneNumber">
-                    <h4 class="mb-3" id="presetPhoneNumber"></h4>
-                </div>
-                <button class="btn btn-primary ls" data-l="TextMe" id="btn_send_text"><i class="far fa-sms"></i> Text Me</button>
-                <button class="btn btn-secondary ls" data-l="CallMe" id="btn_send_call"><i class="fal fa-phone-volume"></i> Call Me</button>
-                <div id="codeConfirmation" class="mt-3 animate__animated animate__zoomIn" style="display: none">
-                    <div id="codeSentAlert" class="alert alert-success"><i class="fad fa-comment-alt-check"></i> Verification code sent! Please enter the code below.</div>
-                    <div class="form-group">
-                        <input class="form-control-lg form-control ls-p" data-l="VerificationCode" id="phoneVerificationCode" placeholder="Verification Code" inputmode="numeric" maxlength="6" autocomplete="no">
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="screen card animate__animated animate__zoomIn" id="loadingAPI" style="display: none">
-            <div class="card-body">
-                <h4 class="card-title ls" data-l="loadingAssets"><i class="fas fa-cog fa-spin"></i> Loading Assets</h4>
-                <p class="card-text ls" data-l="pleaseWait">Hang on, this will only take a moment...</p>
-            </div>
-        </div>
-        <div class="screen card animate__animated animate__zoomIn" id="cameraPermission" style="display: none">
-            <div class="card-body">
-                <h4 class="card-title ls" data-l="CameraPermissionHead"><i class="fa fa-camera"></i> Camera Permission</h4>
-                <p class="card-text ls" data-l="CameraPermissionTipV2">To continue the verification, you must grant permission for our app to access your camera.</p>
-                <button class="showscreen btn btn-secondary ls" data-l="Back" data-screen="agreement">Back</button>
-                <button class="btn btn-primary ls" data-l="GrantPermission" id="btn_grant_permission">Grant Permission</button>
-            </div>
-        </div>
-        <div class="screen card animate__animated animate__zoomIn" id="pendingVerification" style="display: none">
-            <div class="card-body">
-                <h4 class="card-title ls" data-l="VerifyingV2">Just a moment</h4>
-                <p class="card-text" style="text-align: center; margin-top: 30px; margin-bottom: 30px;"><img src="asset/verifying.svg" style="width: 138px; height: auto"></p>
-                <p class="card-text ls" data-l="VerifyingTxtV2" style="text-align: center">Submitting your results...</p>
-            </div>
-        </div>
-        <div class="screen card text-white bg-success animate__animated animate__zoomIn" id="verificationSuccess" style="display: none">
-            <div class="card-body">
-                <h4 class="card-title ls" data-l="SuccessHead"><i class="fa fa-check-circle-o"></i> Verification Success</h4>
-                <p class="card-text ls" data-l="SuccessText">Your documents are uploaded successfully.</p>
-            </div>
-        </div>
-        <div class="screen card text-white bg-danger animate__animated animate__zoomIn" id="verificationFailed" style="display: none">
-            <div class="card-body">
-                <h4 class="card-title ls" data-l="FailHead"><i class="fa fa-times-circle-o"></i> Verification Failed</h4>
-                <p class="card-text" id="failedreason"></p>
-                <button class="btn btn-secondary ls" data-l="Retry" id="btn_retry">Try Again</button>
-            </div>
-        </div>
-        <div class="screen card text-white bg-danger animate__animated animate__zoomIn" id="criticalError" style="display: none">
-            <div class="card-body">
-                <h4 class="card-title ls" data-l="ErrorHead"><i class="fa fa-exclamation-triangle"></i> Error</h4>
-                <p id="criticalErrorMessage" class="card-text"></p>
-            </div>
-        </div>
-        <!-- <p class="footer"><img src="asset/logo1.png" class="branding" id="logo1"></p> -->
-    </div>
-</section>
-<div id="video">
-    <div class="selectCam"><img src="asset/camera-shutter.png"></div>
-    <div class="capturediv portrait" data-cameraside="front">
-        <div id="mask2" class="mask"></div>
-        <div class="heading"><span class="badge badge-primary ls" data-l="ScanFaceV2"><i class="fa fa-user"></i> Scan Face</span></div>
-        <div class="camerafooter">
-            <span class="animate__animated animate__fadeInUp badge badge-warning ls step1" data-l="FaceScanStep1" style="display: none;">Scan your face with no facial expression.</span>
-            <span class="animate__animated animate__heartBeat animate__infinite badge badge-info ls step2" data-l="FaceScanStep2" style="display: none">Now...make a big smile :)</span>
-        </div>
-    </div>
-    <div class="capturediv document" data-cameraside="back">
-        <div id="mask1" class="mask"></div>
-        <div class="heading"><span class="badge badge-primary ls" data-l="ScanIDV2"><i class="fa fa-id-card"></i> Scan Photo ID</span></div>
-        <div class="camerafooter">
-            <span class="animate__animated animate__fadeInUp badge badge-warning ls step1" data-l="DocScanStep1" style="display: none;">Please place ID within the camera window</span>
-            <span class="animate__animated animate__fadeInUp badge badge-info ls step2" data-l="DocScanStep2" style="display: none"><i class="fa fa-exclamation-triangle"></i> Please hold the camera still</span>
-            <span class="animate__animated animate__fadeInUp badge badge-success ls step3" data-l="DocScanStep3" style="display: none"><i class="fas fa-circle-notch fa-spin"></i> Checking ID</span>
-            <span class="animate__animated animate__fadeInUp badge badge-warning ls step4" data-l="DocScanStep4" style="display: none"><i class="fas fa-redo"></i> Flip and scan back side of ID</span>
-        </div>
-    </div>
-    <div id="confirmInfo" class="animate__animated animate__fadeInDown" style="display: none">
-        <h3 class="ls" data-l="ConfirmInformation">Confirm Information</h3>
-        <div class="datafield" data-field="lastName">
-            <p class="ls" data-l="FamilyName">Family Name</p>
-            <h4></h4>
-        </div>
-        <div class="datafield" data-field="firstName">
-            <p class="ls" data-l="GivenName">Given Name</p>
-            <h4></h4>
-        </div>
-        <div class="datafield" data-field="documentNumber">
-            <p class="ls" data-l="DocumentIDNumber">Document ID Number</p>
-            <h4></h4>
-        </div>
-        <div class="datafield" data-field="idtype">
-            <p class="ls" data-l="IDType">ID Type</p>
-            <h4></h4>
-        </div>
-        <div class="datafield" data-field="issuer">
-            <p class="ls" data-l="IssuedCountry">Issued Country</p>
-            <h4></h4>
-        </div>
-        <div class="row" style="margin-top: 20px;">
-            <div class="col-6">
-                <button type="button" class="btn btn-success ls btn-block" data-l="AcceptPhoto" id="btn_confirm_info"><i class="fa fa-check"></i> Confirm</button>
-            </div>
-            <div class="col-6">
-                <button type="button" class="btn btn-secondary ls btn-block" data-l="RetakePhoto" id="btn_rescan"><i class="fa fa-times"></i> Retry</button>
-            </div>
-        </div>
-    </div>
-    <footer class="footer"><img src="https://www.idanalyzer.com/img/logo-blue.png" class="branding" id="logo2"></footer>
-    <video id="recordvideo" autoplay></video>
-    <canvas id="documentcanvas"></canvas>
-    <canvas id="facecanvas"></canvas>
-    <canvas id="faceverifycanvas"></canvas>
-</div>
-<div id="contract" class="animate__animated animate__fadeIn" style="display: none;">
-    <div id="contract_header" class="ls" data-l="ContractHead">
-        <i class="fad fa-file-signature"></i> Review Legal Document
-    </div>
-    <div id="contract_container"></div>
-    <div id="contract_toolbar">
-        <button class="btn btn-block btn-info" id="btn_contract"></button>
-    </div>
-    <div id="signnature_footer">
-        <i class="fad fa-lock-alt"></i> Secured Document Signing Service provided by ID Analyzer DocuPass on behalf of <span class="companyname"></span>.
-    </div>
-    <div style="display: none" class="signature_field notsigned" id="signature_field_template">
-        <img src="asset/signature.svg"> <span class="ls" data-l="ClickToSign">CLICK TO SIGN</span>
-    </div>
-    <div id="signatureCapture" style="display: none;">
-        <div id="signnature_header" class="ls" data-l="PleaseSignBelow">
-            Please Sign Below
-        </div>
-        <div id="canvas_container">
-            <canvas id="signpad"></canvas>
-        </div>
-        <div id="signnature_toolbar">
-            <button type="button" class="btn btn-warning ls" data-l="CancelSignature" id="btn_cancel_signature"><i class="fa fa-times"></i> Cancel</button>
-            <button type="button" class="btn btn-secondary ls" data-l="ClearSignature" id="btn_clear_signature"><i class="fa fa-eraser"></i> Clear</button>
-            <button type="button" class="btn btn-success ls" data-l="AcceptSignature" id="btn_confirm_signature"><i class="fa fa-check"></i> Confirm</button>
-        </div>
-    </div>
-</div>
-<!-- Do not remove Lenna image below -->
-<img src="asset/Lenna.jpg" id="Lenna" style="display: none">
-</body>
-</html>
+html, body {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    font-family: 'Roboto', sans-serif !important;
+    background: #040721;
+}
+
+body {
+    position: relative;
+}
+
+.fullscreen {
+    display: flex;
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    justify-content: center;
+    align-items: center;
+    overflow-y: auto;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    background: #040721;
+
+}
+
+.video {
+    display: none;
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    z-index: 10;
+    overflow: hidden;
+}
+
+.gradient {
+    background: #ece9e6;
+    background: -webkit-linear-gradient(to right, #ece9e6, #ffffff);
+    background: linear-gradient(to right, #ece9e6, #ffffff);
+
+}
+
+.transparent {
+    background: none transparent !important;
+}
+
+.card-text {
+    line-height: 1.2 !important;
+}
+
+.footer {
+    color: #888;
+    font-size: 10px;
+    margin-top: 5px;
+    text-align: right;
+    position: fixed;
+    bottom: 0;
+    right: 10px;
+}
+
+#video {
+    display: none;
+    position: absolute;
+    z-index: 100;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    background-color: #000;
+
+}
+
+#video.fallback {
+    background: #8e9eab;
+    background: -webkit-linear-gradient(to right, #eef2f3, #8e9eab);
+    background: linear-gradient(to right, #eef2f3, #8e9eab);
+}
+
+#video video {
+    object-fit: cover;
+    overflow: hidden;
+    width: 100%;
+    height: 100%;
+}
+
+#video footer {
+    position: fixed;
+    bottom: 0;
+    z-index: 101;
+    left: 0;
+    right: 0;
+    text-align: center;
+}
+
+#video .footer img {
+    max-height: 28px;
+}
+
+#mainscreen .footer img {
+    max-height: 18px;
+}
+
+.darktext {
+    color: #000 !important;
+    text-shadow: 0 0 6px rgba(0, 0, 0, 0.2) !important;
+}
+
+.capturediv {
+    position: absolute;
+    z-index: 100;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+
+}
+
+.capturediv .captureframe {
+    display: block;
+    position: absolute;
+    left: 30px;
+    right: 30px;
+    bottom: 130px;
+    top: 60px;
+
+}
+
+.captureframeface {
+    background-image: url("asset/portrait-frame.png");
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+.captureframebordered {
+    border: dashed 5px rgba(255, 255, 255, 0.3);
+}
+
+.uploadframe {
+    border: dashed 4px rgba(88, 88, 88, 1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding-top: 58px;
+    padding-bottom: 58px;
+    padding-left: 58px;
+    padding-right: 58px;
+    flex-direction: column;
+    cursor: pointer;
+}
+
+.uploadframe i {
+    font-size: 70px;
+    display: block;
+}
+
+.uploadframe span {
+    font-weight: bold;
+    display: block;
+}
+
+.capturediv .tip {
+    margin-top: 50px;
+    width: 80%;
+    display: block;
+    text-align: center;
+    color: #FFF;
+    text-shadow: 0 0 6px rgba(0, 0, 0, 1);
+    font-weight: bold;
+
+}
+
+.capturediv .heading {
+    text-transform: uppercase;
+    display: block;
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 20px;
+    text-align: center;
+    z-index: 120;
+
+}
+
+.capturediv .heading .badge {
+
+    font-size: 15px;
+    border-radius: 10px;
+    padding: 10px 20px;
+}
+
+.bigbtn {
+    position: fixed;
+    bottom: 50px;
+    text-align: center;
+    left: 0;
+    right: 0;
+    width: 100%;
+
+}
+
+.bigbtn2 {
+    position: fixed;
+    bottom: 100px;
+    text-align: center;
+    left: 0;
+    right: 0;
+    width: 100%;
+}
+
+.bigbtn button {
+    width: 80%;
+}
+
+#video .selectCam {
+    display: none;
+    position: absolute;
+    top: 18px;
+    z-index: 101;
+    left: 0;
+    right: 18px;
+    text-align: right;
+}
+
+#video .selectCam img {
+    width: 36px;
+    height: 36px;
+}
+
+.selfiemode {
+    -webkit-transform: scaleX(-1);
+    transform: scaleX(-1);
+}
+
+#preview {
+    display: none;
+    position: absolute;
+    top: 0;
+    z-index: 200;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    background: #000;
+
+
+}
+
+#preview .imgcontainer {
+    display: flex;
+    position: absolute;
+    top: 0;
+    z-index: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    justify-content: center;
+    align-items: center;
+    background: #000;
+}
+
+#preview #captured, #preview video {
+    max-width: 100%;
+    max-height: 100%;
+}
+
+#preview .row {
+    position: absolute;
+    left: 15px;
+    bottom: 20px;
+    right: 15px;
+    width: 100%;
+    z-index: 1;
+
+}
+
+#preloader {
+    background: none;
+    border: none;
+}
+
+#preloader .card-body {
+    text-align: center;
+    color: #888;
+    text-shadow: 0 0 6px rgba(255, 255, 255, 1);
+}
+
+.idlist > span {
+    margin-right: 2px;
+    display: inline-block
+}
+
+.mask {
+    position: absolute;
+    z-index: 100;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+}
+
+.camerafooter {
+    position: absolute;
+    z-index: 103;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 50px;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    flex-direction: column;
+}
+
+.camerafooter .badge {
+    font-weight: normal !important;
+    padding: 5px 10px;
+    font-size: 16px;
+    max-width: 80%;
+    text-align: center;
+    white-space: normal;
+}
+
+#mask2 {
+    background: radial-gradient(circle, transparent 0px, transparent 70%, rgba(4, 7, 53, 0.95) 70%, rgba(255, 255, 255, 0.95) 100%);
+}
+
+@media screen and (orientation: portrait) {
+
+}
+
+@media screen and (orientation: landscape) {
+
+}
+
+#videocanvas {
+    display: none;
+    position: absolute;
+    z-index: 106;
+    left: 0;
+    bottom: 0;
+    right: 0;
+}
+
+#facecanvas {
+    display: none;
+    position: absolute;
+    z-index: 106;
+    left: 0;
+    bottom: 0;
+    right: 0;
+}
+
+#faceverifycanvas {
+    display: none;
+    position: absolute;
+    z-index: 106;
+    left: 0;
+    bottom: 0;
+    right: 0;
+}
+
+#confirmInfo {
+    position: absolute;
+    z-index: 200;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    top: 0;
+    background: #FFF;
+    padding: 20px;
+    overflow-y: auto;
+}
+
+.datafield p {
+    margin-bottom: 0;
+    color: #888;
+    font-family: 'Roboto', sans-serif;
+}
+
+.datafield h4 {
+    color: #000;
+    font-weight: bold;
+    font-size: 20px;
+    font-family: 'Roboto', sans-serif;
+    text-transform: uppercase;
+    display: flex;
+    align-items: center;
+}
+
+.photoPreview {
+    height: 150px;
+    width: auto;
+}
+
+.flagimg {
+    width: 20px;
+    height: 20px;
+    margin-right: 6px;
+}
+
+h4, h5 {
+    font-size: 1.1rem !important;
+}
+
+#phoneVerificationCode::placeholder {
+    letter-spacing: normal !important;
+    font-weight: normal !important;
+}
+
+#phoneVerificationCode {
+    text-align: center;
+    letter-spacing: 10px;
+    font-weight: bold;
+}
+
+
+#contract {
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    justify-content: center;
+    align-items: center;
+    padding: 15px;
+    z-index: 10;
+}
+
+#signatureCapture {
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    justify-content: center;
+    align-items: center;
+    padding: 15px;
+    z-index: 12;
+    background: #FFF;
+    border: solid 1px #000;
+}
+
+#contract_container {
+    padding: 10px;
+    border-radius: 3px;
+    background-color: #FFF;
+    -webkit-box-shadow: 3px 3px 10px 3px rgba(0, 0, 0, 0.15);
+    -moz-box-shadow: 3px 3px 10px 3px rgba(0, 0, 0, 0.15);
+    box-shadow: 3px 3px 10px 3px rgba(0, 0, 0, 0.15);
+    font-family: "Tahoma", serif;
+    width: 100%;
+    max-width: 210mm;
+    overflow: auto;
+    flex-grow: 1;
+}
+
+#contract_container h1,#contract_container h2,#contract_container h3,#contract_container h4,#contract_container h5,#contract_container h6{
+    font-family: "Arial", serif;
+    color: revert;
+    font-weight: revert;
+    font-size: revert;
+}
+
+#contract_container img, #contract_container p {
+    max-width: 100% !important;
+}
+
+#contract_header {
+    max-width: 210mm;
+    font-size: 1.2rem;
+    margin-bottom: 5px;
+    text-shadow: 0 1px 0 #FFF;
+    font-weight: bold;
+    text-align: center;
+}
+
+#contract_toolbar {
+    max-width: 210mm;
+    margin-top: 15px;
+    width: 100%;
+}
+
+::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+}
+
+::-webkit-scrollbar-button {
+    width: 0;
+    height: 0;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #9c9c9c;
+    border: 0 none #ffffff;
+    border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #b8deff;
+}
+
+::-webkit-scrollbar-thumb:active {
+    background: #80bdff;
+}
+
+::-webkit-scrollbar-track {
+    background: none;
+    border: 0 none #ffffff;
+    border-radius: 3px;
+}
+
+::-webkit-scrollbar-track:hover {
+    background: none;
+}
+
+::-webkit-scrollbar-track:active {
+    background: none;
+}
+
+::-webkit-scrollbar-corner {
+    background: transparent;
+}
+
+.signature_field {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    border: solid 1px #888;
+
+    max-width: 100%;
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 1.2rem;
+    opacity: 0.8;
+    color: #222;
+
+}
+
+.notsigned {
+    border: solid 2px #ee1e2d;
+    background-image: url("signaturebg.svg");
+    background-size: cover;
+}
+
+.signed {
+    border: solid 2px #00a45c;
+}
+
+.signed img {
+    width: 100%; /* or any custom size */
+    height: 100%;
+    object-fit: contain;
+}
+
+.signature_field:hover {
+    opacity: 1;
+}
+
+.signature_field.notsigned img {
+    margin-right: 3px;
+    height: 30px;
+    width: 30px;
+}
+
+#signpad {
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    object-fit: contain;
+}
+
+#canvas_container {
+    width: 100%;
+    flex-grow: 1;
+    position: relative;
+    overflow: hidden;
+
+}
+
+#signnature_toolbar {
+    width: 100%;
+    display: flex;
+}
+
+#signnature_toolbar button {
+    flex: 1;
+}
+
+#signnature_toolbar button:not(:last-child) {
+    margin-right: 3px;
+}
+
+#signnature_header {
+    width: 100%;
+    font-weight: bold;
+    font-size: 1.2rem;
+    text-align: center;
+
+}
+
+#signnature_footer {
+    padding-top: 10px;
+    font-size: 10px;
+    text-shadow: 0 1px 0 #FFF;
+    text-align: center;
+    padding-left: 10px;
+    padding-right: 10px;
+}
