@@ -289,7 +289,7 @@ body {
     text-align: center;
     color: #888;
     text-shadow: 0 0 6px rgba(255, 255, 255, 1);
-    background: #040721;
+    background: #040721 !important;
 }
 
 .idlist > span {
